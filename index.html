@@ -6,8 +6,19 @@
 </head>
 <body>
 
+<div id="app">
+  {{ message }}
+</div>
+
+<!-- В дополнение к интерполяции текста, мы можем также связывать атрибуты элементов: -->
+<div id="app-2">
+  <span v-bind:title="message">
+    Подержи курсор надо мной пару секунд, чтобы увидеть динамически связанное значение title!
+  </span>
+</div>
+
 
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
-
+<script src="main.js"></script>
 </body>
 </html>
