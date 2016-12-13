@@ -52,6 +52,16 @@
 
 
 
+<div id="app-7">
+  <ol>
+    <!-- Теперь мы можем передать каждому todo описание задачи, -->
+    <!-- то есть отображать данные динамически                  -->
+    <todo-item v-for="item in groceryList" v-bind:todo="item"></todo-item>
+  </ol>
+</div>
+
+
+
 
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
 <script src="main.js"></script>
