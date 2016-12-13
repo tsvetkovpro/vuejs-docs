@@ -1,71 +1,15 @@
-var app = new Vue({
-  el: '#app',
-  data: {
-    message: 'Hello Vue!'
-  }
+// Каждый vm — это корневой инстанс Vue, создаваемый функцией-конструктором:
+var vm = new Vue({
+  // опции
 })
 
 
-var app2 = new Vue({
-	el: '#app-2',
-	data: {
-		message: 'Вы навели на текст: ' + new Date()
-	}
+// Конструктор Vue можно расширить, получив переиспользуемый компонент с предустановленными опциями:
+var MyComponent = Vue.extend({
+  // опции компонента
 })
+// все инстансы `MyComponent` создаются
+// с предопределёнными опциями
+var myComponentInstance = new MyComponent()
 
-
-var app3 = new Vue({
-  el: '#app-3',
-  data: {
-    seen: true
-  }
-})
-
-
-var app4 = new Vue({
-  el: '#app-4',
-  data: {
-    todos: [
-      { text: 'Посадить дерево' },
-      { text: 'Построить дом' },
-      { text: 'Вырастить сына' }
-    ]
-  }
-})
-
-
-var app5 = new Vue({
-  el: '#app-5',
-  data: {
-    message: 'Hello Vue.js!'
-  },
-  methods: {
-    reverseMessage: function () {
-      this.message = this.message.split('').reverse().join('')
-    }
-  }
-})
-
-
-var app6 = new Vue({
-  el: '#app-6',
-  data: {
-    message: 'Hello Vue!'
-  }
-})
-
-
-Vue.component('todo-item', {
-  props: ['todo'],
-  template: '<li>{{ todo.text }}</li>'
-})
-var app7 = new Vue({
-  el: '#app-7',
-  data: {
-    groceryList: [
-      { text: 'Овощи' },
-      { text: 'Сыр' },
-      { text: 'Что там ещё люди едят?' }
-    ]
-  }
-})
+// Хотя можно создать инстанс компонента и императивно, как показано выше, чаще рекомендуется создавать их декларативно, как пользовательские элементы в шаблонах.
