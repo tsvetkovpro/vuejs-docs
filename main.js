@@ -1,76 +1,54 @@
-// Каждый vm — это корневой инстанс Vue, создаваемый функцией-конструктором:
-var vm = new Vue({
-  // опции
-})
 
-
-// Конструктор Vue можно расширить, получив переиспользуемый компонент с предустановленными опциями:
-var MyComponent = Vue.extend({
-  // опции компонента
-})
-// все инстансы `MyComponent` создаются
-// с предопределёнными опциями
-var myComponentInstance = new MyComponent()
-
-// Хотя можно создать инстанс компонента и императивно, как показано выше, чаще рекомендуется создавать их декларативно, как пользовательские элементы в шаблонах.
-
-
-// Каждый инстанс Vue проксирует все свойства своего объекта data:
-var data = { a: 1 }
-var vm = new Vue({
-  data: data
-})
-vm.a === data.a // -> true
-// установка свойства также влияет на оригинальные данные
-vm.a = 2
-data.a // -> 2
-// ... и наоборот
-data.a = 3
-vm.a // -> 3
-
-
-// Помимо свойств объекта data, инстанс Vue предоставляет ряд собственных свойств и методов. Их имена начинаются с $, чтобы отличаться от свойств данных. Например:
-var data = { a: 1 }
 var vm = new Vue({
   el: '#example',
-  data: data
-})
-vm.$data === data // -> true
-vm.$el === document.getElementById('example') // -> true
-// $watch — это метод инстанса
-vm.$watch('a', function (newVal, oldVal) {
-  // этот коллбэк будет вызван, когда изменится `vm.a`
-})
-
-
-
-// Каждый инстанс Vue проходит при своём создании через последовательность шагов инициализации — например, настраивает наблюдение за данными, компилирует шаблон, монтирует инстанс в DOM, а также обновляет DOM при изменении данных. Во время этих шагов вызываются хуки жизненного цикла, дающие возможность выполнять какие-нибудь дополнительные действия. Например, хук created вызывается после создания инстанса:
-var vm = new Vue({
   data: {
-    a: 1
+    message: 'Привет'
   },
-  created: function () {
-    // `this` указывает на инстанс vm
-    console.log('Значение a: ' + this.a)
-  }
-})
-// -> "Значение a: 1"
-
-
-// Существуют также другие хуки, вызываемые на различных стадиях жизненного цикла инстанса, например mounted, updated и destroyed. Все хуки вызываются с контекстной переменной this, ссылающейся на вызывающий инстанс Vue. Возможно, вы недоумевали: где же в мире Vue живут контроллеры? Ответ на этот вопрос таков: контроллеров не существует. Всё пользовательское поведение компонента должно быть размещено в этих хуках.
-
-
-
-// https://ru.vuejs.org/images/lifecycle.png
-
-
-new Vue({
-  // ...
-  filters: {
-    capitalize: function (value) {
-      if (!value) return ''
-      value = value.toString()
-      return value.charAt(0).toUpperCase() + value.slice(1)
+  computed: {
+    // геттер вычисляемого значения
+    reversedMessage: function () {
+      // `this` указывает на инстанс vm
+      return this.message.split('').reverse().join('')
     }
   }
 })
+
+
+
+var vm = new Vue({
+  el: '#demo',
+  data: {
+    firstName: 'Foo',
+    lastName: 'Bar'
+  },
+  computed: {
+    fullName: function () {
+      return `${this.firstName} ${this.lastName}`
+    }
+  }
+})
+
+
+
+var vm = new Vue({
+  el: '#demo1',
+  data: {
+    firstName: 'Foo1',
+    lastName: 'Bar1'
+  },
+  computed: {
+  fullName: {
+    // геттер:
+    get: function () {
+      return this.firstName + ' ' + this.lastName
+    },
+    // сеттер:
+    set: function (newValue) {
+      var names = newValue.split(' ')
+      this.firstName = names[0]
+      this.lastName = names[names.length - 1]
+    }
+  }
+}
+})
+
