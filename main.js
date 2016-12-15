@@ -62,3 +62,15 @@ var vm = new Vue({
 
 
 // https://ru.vuejs.org/images/lifecycle.png
+
+
+new Vue({
+  // ...
+  filters: {
+    capitalize: function (value) {
+      if (!value) return ''
+      value = value.toString()
+      return value.charAt(0).toUpperCase() + value.slice(1)
+    }
+  }
+})
