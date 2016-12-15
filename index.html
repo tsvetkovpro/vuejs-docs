@@ -54,7 +54,17 @@ methods: {
 
 
 
+<!-- Методы слежения -->
 
+<!-- Хотя в большинстве случаев лучше использовать вычисляемые свойства, иногда методы слежения всё же необходимы. Поэтому Vue предоставляет опцию watch, позволяющую как угодно реагировать на изменения в данных. Полезнее всего эта возможность оказывается для дорогих или асинхронных операций -->
+<!-- Рассмотрим пример: -->
+<div id="watch-example">
+  <p>
+    Задайте вопрос, на который можно ответить "да" или "нет":
+    <input v-model="question">
+  </p>
+  <p>{{ answer }}</p>
+</div>
 
 
 
@@ -62,7 +72,51 @@ methods: {
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
 <script src="main.js"></script>
 
-
+<script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+<script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
+<script>
+var watchExampleVM = new Vue({
+  el: '#watch-example',
+  data: {
+    question: '',
+    answer: 'Пока вы не зададите вопрос, я не могу ответить!'
+  },
+  watch: {
+    // эта функция запускается при любом изменении вопроса
+    question: function (newQuestion) {
+      this.answer = 'Ожидаю, когда вы закончите печатать...'
+      this.getAnswer()
+    }
+  },
+  methods: {
+    // _.debounce — это функция из lodash, позволяющая ограничить
+    // то, насколько часто может выполняться определённая операция.
+    // В данном случае, мы хотим ограничить частоту обращений к yesno.wtf/api,
+    // дожидаясь завершения печати вопроса перед тем как послать ajax-запрос.
+    // Чтобы узнать больше о функции _.debounce (и её родственнице _.throttle),
+    // см. документацию: https://lodash.com/docs#debounce
+    getAnswer: _.debounce(
+      function () {
+        var vm = this
+        if (this.question.indexOf('?') === -1) {
+          vm.answer = 'Вопросы обычно заканчиваются вопросительным знаком. ;-)'
+          return
+        }
+        vm.answer = 'Думаю...'
+        axios.get('https://yesno.wtf/api')
+          .then(function (response) {
+            vm.answer = _.capitalize(response.data.answer)
+          })
+          .catch(function (error) {
+            vm.answer = 'Ошибка! Не могу связаться с API. ' + error
+          })
+      },
+      // Это количество миллисекунд, после которого мы считаем, что пользователь прекратил печатать:
+      500
+    )
+  }
+})
+</script>
 
 
 
